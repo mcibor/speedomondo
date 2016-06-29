@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "Speedomondo",
+    "description": "",
+    "version": "0.1",
+    "browser_action":{
+        "default_popup": "popup.html",
+        "default_title": "Speedomondo"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "debugger",
+        "https://www.endomondo.com/users/*/workouts/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["https://www.endomondo.com/users/*/workouts/*"],
+            "js": ["app.js"]
+        }
+    ]
+    // "background":{
+    //     "scripts": ["background.js"]
+    // }
+}
