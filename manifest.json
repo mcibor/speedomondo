@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Speedomondo",
-  "description": "",
+  "description": "Calculate average speed in selected section of your workout in Endomondo.",
   "version": "0.1",
   "browser_action": {
     "default_popup": "popup.html",

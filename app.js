@@ -42,9 +42,9 @@ function showData(avgspeed, time, distance) {
     document.body.insertAdjacentElement("afterBegin", createSpeed());
   }
 
-  document.getElementById("speedp").innerHTML = "Speed: " + avgspeed;
-  document.getElementById("timep").innerHTML = "Time: " + time;
-  document.getElementById("distp").innerHTML = "Distance: " + distance;
+  document.getElementById("speedp").innerHTML = "Average speed: " + avgspeed.toFixed(1) + " km/h";
+  document.getElementById("timep").innerHTML = "Time: " + convertSecondsToHHMMSS(time);
+  document.getElementById("distp").innerHTML = "Distance: " + distance.toFixed(2) + " km";
 }
 
 function hideData() {
@@ -61,7 +61,49 @@ function getData() {
   return data;
 }
 
-// Data from endomondo toopltip: [duration,distance,speed,altitude]
+function convertHHMMSStoSeconds(timeString) {
+  var tmp = timeString.split(":").reverse();
+  var time = parseInt(tmp[0].match(/\d/g).join(""));
+  time += parseInt(tmp[1].match(/\d/g).join("")) * 60;
+  if (tmp.length == 3)
+    time += parseInt(tmp[2].match(/\d/g).join("")) * 3600;
+
+  return time;
+}
+
+function convertSecondsToHHMMSS(time) {
+  var hours = Math.floor(time / 3600);
+  var minutes = Math.floor((time - (hours * 3600)) / 60);
+  var seconds = time - (hours * 3600) - (minutes * 60);
+
+  if (minutes < 10 && hours > 0) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+
+  var timeString = "";
+  if (hours > 0)
+    timeString += hours + "h:";
+
+  return timeString + minutes + "m:" + seconds+"s";
+}
+
+function calculateSpeed(start, end) {
+  var startTime = start[0].split(" ")[1];
+  startTime = convertHHMMSStoSeconds(startTime);
+  var endTime = end[0].split(" ")[1];
+  endTime = convertHHMMSStoSeconds(endTime);
+  var totalTime = Math.abs(endTime - startTime);
+
+  var startDist = start[1].split(" ")[1];
+  startDist = parseFloat(startDist);
+  var endDist = end[1].split(" ")[1];
+  endDist = parseFloat(endDist);
+  var totalDist = Math.abs(endDist - startDist);
+
+  var avgspeed = totalDist / totalTime * 3600;
+  return { avgspeed: avgspeed, duration: totalTime, distance: totalDist };
+}
+
+// Data from endomondo tooltip: [duration,distance,speed,altitude]
 var startData = null;
 var mousemoved = false;
 document.onmousedown = function (e) {
@@ -77,8 +119,8 @@ document.onmousemove = function (e) {
 document.onmouseup = function (e) {
   if (e.path.find(function (e) { return e.nodeName == "svg" }) && mousemoved) {
     mousemoved = false;
-    var endData = getData();
-    showData(startData[2] + " " + endData[2], startData[0] + " " + endData[0], startData[1] + " " + endData[1]);
-    
+    var data = calculateSpeed(startData, getData());
+    showData(data.avgspeed, data.duration, data.distance);
+
   }
 }
