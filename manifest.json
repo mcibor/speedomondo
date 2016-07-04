@@ -20,7 +20,11 @@
       ],
       "js": [
         "config.js",
-        "app.js"
+        "content_scripts/components.js",
+        "content_scripts/time_converters.js",
+        "content_scripts/data_functions.js",
+        "content_scripts/events_listeners.js",
+        "content_scripts/app.js"
       ]
     }
   ],
