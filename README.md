@@ -2,7 +2,7 @@
 Small extension for Chrome and Endomondo.
 
 ### Description
-Extensoin calculates and displays average speed in selected section of a workout at endomondo website.
+Extension calculates and displays average speed in selected section of a workout at endomondo website.
 
 ### Installation
 1. Clone repository.
