@@ -169,7 +169,6 @@ function processRequest(request) {
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.request) {
-      console.log(request);
       processRequest(request.request);
     }
   }
@@ -179,7 +178,6 @@ var port = chrome.runtime.connect(config.port);
 port.postMessage({ msg: config.request.checkUrl });
 port.onMessage.addListener(function (msg) {
   if (msg.response) {
-    console.log(msg);
     processResponse(msg.response);
   }
 });
@@ -191,8 +189,6 @@ function windowResizeListener(e) {
     var coords = getCoords(charts);
     speed.style.top = coords.top + "px";
     speed.style.left = (coords.left + charts.clientWidth) + "px";
-    console.log(coords);
-    console.log(speed.style.top + " " + speed.style.left);
   }
 }
 

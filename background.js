@@ -4,9 +4,8 @@ function sendMsg(tabId, url) {
     msg.request = config.request.newWorkout;
   else if (config.patt.home.test(url))
     msg.request = config.request.home;
-  
+
   if (msg.request) {
-    console.log(msg);
     chrome.tabs.sendMessage(tabId, msg);
   }
 };
@@ -26,7 +25,6 @@ chrome.runtime.onConnect.addListener(function (port) {
             config.response.workout :
             config.response.home
         }
-        console.log(msg);
         port.postMessage(msg);
       });
     }
