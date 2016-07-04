@@ -16,11 +16,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     sendMsg(tabId, changeInfo.url);
 });
 
-chrome.tabs.onCreated.addListener(function (tab) {
-  if (tab.url)
-    sendMsg(tab.id, tab.url);
-});
-
 chrome.runtime.onConnect.addListener(function (port) {
   console.assert(port.name === config.port.name);
   port.onMessage.addListener(function (msg) {
