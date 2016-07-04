@@ -110,17 +110,19 @@ var startData = null;
 var mousemoved = false;
 function mouseDownListener(e) {
   mousemoved = false;
-  if (e.path.find(function (e) { return e.nodeName == "svg" })) {
+  if (e.path.find(function (e) { return e.nodeName == "svg"; })) {
     startData = getData();
   }
 }
 
 function mouseMoveListener(e) {
-  mousemoved = true;
+  if (e.buttons > 0 && e.path.find(function (e) { return e.nodeName == "svg"; })) {
+    mousemoved = true;
+  }
 }
 
 function mouseUpListener(e) {
-  if (e.path.find(function (e) { return e.nodeName == "svg" }) && mousemoved) {
+  if (mousemoved && e.path.find(function (e) { return e.nodeName == "svg"; })) {
     mousemoved = false;
     if (startData) {
       var data = calculateSpeed(startData, getData());
