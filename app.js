@@ -130,15 +130,15 @@ function mouseUpListener(e) {
 }
 
 function addListeners() {
-  document.addEventListener("mouseup",mouseUpListener);
-  document.addEventListener("mousedown",mouseDownListener);
-  document.addEventListener("mousemove",mouseMoveListener);
+  document.addEventListener("mouseup", mouseUpListener);
+  document.addEventListener("mousedown", mouseDownListener);
+  document.addEventListener("mousemove", mouseMoveListener);
 }
 
 function removeListeners() {
-  document.removeEventListener("mouseup",mouseUpListener);
-  document.removeEventListener("mousedown",mouseDownListener);
-  document.removeEventListener("mousemove",mouseMoveListener);
+  document.removeEventListener("mouseup", mouseUpListener);
+  document.removeEventListener("mousedown", mouseDownListener);
+  document.removeEventListener("mousemove", mouseMoveListener);
 }
 
 
@@ -168,7 +168,7 @@ function processRequest(request) {
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-    if (request.request){
+    if (request.request) {
       console.log(request);
       processRequest(request.request);
     }
@@ -176,10 +176,25 @@ chrome.runtime.onMessage.addListener(
 )
 
 var port = chrome.runtime.connect(config.port);
-port.postMessage({msg:config.request.checkUrl});
-port.onMessage.addListener(function(msg){
-  if(msg.response){
+port.postMessage({ msg: config.request.checkUrl });
+port.onMessage.addListener(function (msg) {
+  if (msg.response) {
     console.log(msg);
     processResponse(msg.response);
-  }  
+  }
 });
+
+function windowResizeListener(e) {
+  var speed = document.getElementById("speed");
+  if (speed) {
+    var charts = document.getElementsByClassName("highcharts-container")[0];
+    var coords = getCoords(charts);
+    speed.style.top = coords.top + "px";
+    speed.style.left = (coords.left + charts.clientWidth) + "px";
+    console.log(coords);
+    console.log(speed.style.top + " " + speed.style.left);
+  }
+}
+
+window.addEventListener("resize", windowResizeListener, true);
+
