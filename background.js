@@ -1,28 +1,39 @@
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-//   var patt = /.*endomondo.*users.*workouts.*/;
-//   if(tab.active && changeInfo.url && patt.test(changeInfo.url)){
-//     chrome.tabs.sendMessage(
-//       tabId, 
-//       {    
-//         newWorkout: true
-//       }, 
-//       function(response){
-//         console.log(response);
-//       });
-//   }
-// });
+function sendMsg(tabId, url) {
+  var msg = {}
+  if (config.patt.workout.test(url))
+    msg.request = config.request.newWorkout;
+  else if (config.patt.home.test(url))
+    msg.request = config.request.home;
+  
+  if (msg.request) {
+    console.log(msg);
+    chrome.tabs.sendMessage(tabId, msg);
+  }
+};
 
-// Data from endomondo toopltip: [duration,distance,speed,altitude]
-// var lastData = null;
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.url)
+    sendMsg(tabId, changeInfo.url);
+});
 
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   if ("start" in request &&
-//     "end" in request &&
-//     request.start.length == 4 &&
-//     request.end.length == 4) {
-//       console.log(request);
-//       sendResponse("OK");
-//   }
-//   else
-//     sendResponse("Bad request.");
-// })
+chrome.tabs.onCreated.addListener(function (tab) {
+  if (tab.url)
+    sendMsg(tab.id, tab.url);
+});
+
+chrome.runtime.onConnect.addListener(function (port) {
+  console.assert(port.name === config.port.name);
+  port.onMessage.addListener(function (msg) {
+    if (msg.msg === config.request.checkUrl) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var msg = {
+          response: config.patt.workout.test(tabs[0].url) ?
+            config.response.workout :
+            config.response.home
+        }
+        console.log(msg);
+        port.postMessage(msg);
+      });
+    }
+  });
+});

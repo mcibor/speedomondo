@@ -48,7 +48,9 @@ function showData(avgspeed, time, distance) {
 }
 
 function hideData() {
-
+  var speed = document.getElementById("speed");
+  if (speed)
+    speed.parentNode.removeChild(speed);
 }
 
 function getData() {
@@ -83,7 +85,7 @@ function convertSecondsToHHMMSS(time) {
   if (hours > 0)
     timeString += hours + "h:";
 
-  return timeString + minutes + "m:" + seconds+"s";
+  return timeString + minutes + "m:" + seconds + "s";
 }
 
 function calculateSpeed(start, end) {
@@ -106,21 +108,78 @@ function calculateSpeed(start, end) {
 // Data from endomondo tooltip: [duration,distance,speed,altitude]
 var startData = null;
 var mousemoved = false;
-document.onmousedown = function (e) {
+function mouseDownHandler(e) {
   mousemoved = false;
   if (e.path.find(function (e) { return e.nodeName == "svg" })) {
     startData = getData();
   }
 }
-document.onmousemove = function (e) {
+
+function mouseMoveHandler(e) {
   mousemoved = true;
 }
 
-document.onmouseup = function (e) {
+function mouseUpHandler(e) {
   if (e.path.find(function (e) { return e.nodeName == "svg" }) && mousemoved) {
     mousemoved = false;
-    var data = calculateSpeed(startData, getData());
-    showData(data.avgspeed, data.duration, data.distance);
-
+    if (startData) {
+      var data = calculateSpeed(startData, getData());
+      showData(data.avgspeed, data.duration, data.distance);
+    }
   }
 }
+
+function addHandlers() {
+  document.onmousedown = mouseDownHandler;
+  document.onmouseup = mouseUpHandler;
+  document.onmousemove = mouseMoveHandler;
+}
+
+function removeHandlers() {
+  document.onmousedown = null;
+  document.onmouseup = null;
+  document.onmousemove = null;
+}
+
+
+function processResponse(response) {
+  switch (response) {
+    case config.response.workout:
+      addHandlers();
+      break;
+    case config.response.home:
+      removeHandlers();
+      break;
+  }
+}
+
+function processRequest(request) {
+  switch (request) {
+    case config.request.newWorkout:
+      addHandlers();
+      hideData();
+      break;
+    case config.request.home:
+      removeHandlers();
+      hideData();
+      break;
+  }
+}
+
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    if (request.request){
+      console.log(request);
+      processRequest(request.request);
+    }
+  }
+)
+
+var port = chrome.runtime.connect(config.port);
+port.postMessage({msg:config.request.checkUrl});
+port.onMessage.addListener(function(msg){
+  if(msg.response){
+    console.log(msg);
+    processResponse(msg.response);
+  }  
+});

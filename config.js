@@ -5,14 +5,14 @@ var config = {
   request: {
     checkUrl: "checkUrl",
     newWorkout: "newWorkout",
-    other: "other"
+    home: "home"
   },
   response: {
     workout: "workout",
-    other: "other"
+    home: "home"
   },
   patt: {
     workout: /endomondo.*users.*workouts/,
-    endomondo: /endomondo/
+    home: /endomondo.*home/
   }
 }

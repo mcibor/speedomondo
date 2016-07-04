@@ -9,18 +9,26 @@
   },
   "permissions": [
     "tabs",
-    "activeTab",
     "debugger",
-    "https://www.endomondo.com/*"    
+    "https://www.endomondo.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
+        "https://www.endomondo.com/home",
         "https://www.endomondo.com/users/*/workouts/*"
       ],
       "js": [
+        "config.js",
         "app.js"
       ]
     }
-  ]
+  ],
+  "background": {
+    "scripts": [
+      "config.js",
+      "background.js"
+    ],
+    "persistent": false
+  }
 }
