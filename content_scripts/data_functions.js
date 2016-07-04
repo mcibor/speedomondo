@@ -28,15 +28,19 @@ function getData() {
 }
 
 function calculateSpeed(start, end) {
-  var startTime = start[0].split(" ")[1];
+  var tmp = start[0].split(" ");
+  var startTime = tmp[tmp.length-1];
   startTime = convertHHMMSStoSeconds(startTime);
-  var endTime = end[0].split(" ")[1];
+  tmp = end[0].split(" ");
+  var endTime = tmp[tmp.length-1];
   endTime = convertHHMMSStoSeconds(endTime);
   var totalTime = Math.abs(endTime - startTime);
 
-  var startDist = start[1].split(" ")[1];
+  tmp = start[1].split(" ");
+  var startDist = tmp[tmp.length-2];
   startDist = parseFloat(startDist);
-  var endDist = end[1].split(" ")[1];
+  tmp = end[1].split(" ");
+  var endDist = tmp[tmp.length-2];
   endDist = parseFloat(endDist);
   var totalDist = Math.abs(endDist - startDist);
 
