@@ -108,18 +108,18 @@ function calculateSpeed(start, end) {
 // Data from endomondo tooltip: [duration,distance,speed,altitude]
 var startData = null;
 var mousemoved = false;
-function mouseDownHandler(e) {
+function mouseDownListener(e) {
   mousemoved = false;
   if (e.path.find(function (e) { return e.nodeName == "svg" })) {
     startData = getData();
   }
 }
 
-function mouseMoveHandler(e) {
+function mouseMoveListener(e) {
   mousemoved = true;
 }
 
-function mouseUpHandler(e) {
+function mouseUpListener(e) {
   if (e.path.find(function (e) { return e.nodeName == "svg" }) && mousemoved) {
     mousemoved = false;
     if (startData) {
@@ -129,26 +129,26 @@ function mouseUpHandler(e) {
   }
 }
 
-function addHandlers() {
-  document.onmousedown = mouseDownHandler;
-  document.onmouseup = mouseUpHandler;
-  document.onmousemove = mouseMoveHandler;
+function addListeners() {
+  document.addEventListener("mouseup",mouseUpListener);
+  document.addEventListener("mousedown",mouseDownListener);
+  document.addEventListener("mousemove",mouseMoveListener);
 }
 
-function removeHandlers() {
-  document.onmousedown = null;
-  document.onmouseup = null;
-  document.onmousemove = null;
+function removeListeners() {
+  document.removeEventListener("mouseup",mouseUpListener);
+  document.removeEventListener("mousedown",mouseDownListener);
+  document.removeEventListener("mousemove",mouseMoveListener);
 }
 
 
 function processResponse(response) {
   switch (response) {
     case config.response.workout:
-      addHandlers();
+      addListeners();
       break;
     case config.response.home:
-      removeHandlers();
+      removeListeners();
       break;
   }
 }
@@ -156,11 +156,11 @@ function processResponse(response) {
 function processRequest(request) {
   switch (request) {
     case config.request.newWorkout:
-      addHandlers();
+      addListeners();
       hideData();
       break;
     case config.request.home:
-      removeHandlers();
+      removeListeners();
       hideData();
       break;
   }
