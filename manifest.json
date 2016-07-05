@@ -4,7 +4,7 @@
   "description": "Calculate average speed in selected section of your workout in Endomondo.",
   "version": "0.1",
   "browser_action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup.html",
     "default_title": "Speedomondo"
   },
   "permissions": [
@@ -19,20 +19,20 @@
         "https://www.endomondo.com/users/*/workouts/*"
       ],
       "js": [
-        "config.js",
-        "content_scripts/components.js",
-        "content_scripts/time_converters.js",
-        "content_scripts/data_functions.js",
-        "content_scripts/observers.js",
-        "content_scripts/events_listeners.js",
-        "content_scripts/app.js"
+        "src/config.js",
+        "src/content_scripts/components.js",
+        "src/content_scripts/time_converters.js",
+        "src/content_scripts/data_functions.js",
+        "src/content_scripts/observers.js",
+        "src/content_scripts/events_listeners.js",
+        "src/content_scripts/app.js"
       ]
     }
   ],
   "background": {
     "scripts": [
-      "config.js",
-      "background.js"
+      "src/config.js",
+      "src/background.js"
     ],
     "persistent": false
   }
