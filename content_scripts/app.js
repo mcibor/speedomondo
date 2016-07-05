@@ -1,3 +1,5 @@
+/// <reference path="observers.js" />
+
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.request) {
@@ -9,6 +11,7 @@ chrome.runtime.onMessage.addListener(
         case config.request.home:
           removeListeners();
           hideData();
+          disconnectObservers();
           break;
       }
     }
@@ -24,7 +27,7 @@ port.onMessage.addListener(function (msg) {
         addListeners();
         break;
       case config.response.home:
-        removeListeners();
+        removeListeners();        
         break;
     }
   }

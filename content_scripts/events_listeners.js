@@ -1,3 +1,5 @@
+/// <reference path="observers.js" />
+
 var startData = null;
 var mousemoved = false;
 function mouseDownListener(e) {
@@ -5,7 +7,7 @@ function mouseDownListener(e) {
   var svg = e.path.find(function (e) { return e.nodeName == "svg"; }); 
   if (svg !== undefined) {
     startData = getData();
-    
+    initObservers(svg);
   }
 }
 
