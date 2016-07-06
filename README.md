@@ -3,6 +3,7 @@ Small extension for Chrome and Endomondo.
 
 ### Description
 Extension calculates and displays average speed in selected section of a workout at endomondo website.
+![](https://raw.githubusercontent.com/mcibor/speedomondo/master/misc/endo.png)
 
 ### Installation
 1. Clone repository.
