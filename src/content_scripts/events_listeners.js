@@ -4,7 +4,7 @@ var startData = null;
 var mousemoved = false;
 function mouseDownListener(e) {
   mousemoved = false;
-  var svg = e.path.find(function (e) { return e.nodeName == "svg"; }); 
+  var svg = e.path.find(e => e.nodeName === "svg");
   if (svg !== undefined) {
     startData = getData();
     initObservers(svg);
@@ -12,13 +12,13 @@ function mouseDownListener(e) {
 }
 
 function mouseMoveListener(e) {
-  if (e.buttons > 0 && e.path.find(function (e) { return e.nodeName == "svg"; })) {
+  if (e.buttons > 0 && e.path.find(e => e.nodeName === "svg")) {
     mousemoved = true;
   }
 }
 
 function mouseUpListener(e) {
-  if (mousemoved && e.path.find(function (e) { return e.nodeName == "svg"; })) {
+  if (mousemoved && e.path.find(e => e.nodeName === "svg")) {
     mousemoved = false;
     if (startData) {
       var data = calculateSpeed(startData, getData());

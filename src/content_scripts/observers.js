@@ -28,8 +28,8 @@ var svgObserver = new MutationObserver(function (mutations) {
 var navtabObserver = new MutationObserver(function (mutations) {
   //console.log({ tab: mutations });
   var classAtt = mutations[0].target.attributes["class"];
-  if(classAtt){
-    if(/active/.test(classAtt.value)){
+  if (classAtt) {
+    if (/active/.test(classAtt.value)) {
       addListeners();
     } else {
       removeListeners();

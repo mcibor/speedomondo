@@ -27,7 +27,7 @@ port.onMessage.addListener(function (msg) {
         addListeners();
         break;
       case config.response.home:
-        removeListeners();        
+        removeListeners();
         break;
     }
   }
